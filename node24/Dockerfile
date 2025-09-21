@@ -43,5 +43,10 @@ RUN echo 'export NVM_DIR="$HOME/.nvm"' >> /home/container/.profile \
     && echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> /home/container/.profile
 
 USER container
-ENV USER=container HOME=/home/container NVM_DIR=/home/container/.nvm
+ENV USER=container HOME=/home/container NVM_DIR=/home/container/
 WORKDIR /home/container
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/usr/bin/tini", "-g", "--"]
+CMD ["/entrypoint.sh"]
