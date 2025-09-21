@@ -28,7 +28,7 @@ RUN apt update \
         tini
 
 # Install nvm for all users (root and container)
-ENV NVM_DIR=/home/container/.nvm
+ENV NVM_DIR=/home/container/
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash \
     && . "$NVM_DIR/nvm.sh" \
     && nvm install 24 \
@@ -45,8 +45,3 @@ RUN echo 'export NVM_DIR="$HOME/.nvm"' >> /home/container/.profile \
 USER container
 ENV USER=container HOME=/home/container NVM_DIR=/home/container/.nvm
 WORKDIR /home/container
-
-COPY --chown=container:container ./../entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-ENTRYPOINT ["/usr/bin/tini", "-g", "--"]
-CMD ["/entrypoint.sh"]
